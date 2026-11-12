@@ -1,19 +1,19 @@
 
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 from pathlib import Path
 
 # --------------------------------------------------
-# JOBSTREET COLOUR THEME
+# COLOUR THEME
 # --------------------------------------------------
 
-JOBSTREET_BLUE = "#0066CC"
-DARK_BLUE = "#003B70"
-LIGHT_BLUE = "#EAF3FC"
-BACKGROUND = "#F4F7FB"
-WHITE = "#FFFFFF"
-TEXT_DARK = "#263746"
+JOBSTREET_BLUE = "#0872CE"
+DARK_BLUE = "#172B4D"
 TEXT_GREY = "#536579"
-BORDER = "#DCE5EF"
+BACKGROUND = "#F5F7FB"
+WHITE = "#FFFFFF"
+BORDER = "#E6EBF2"
 
 # --------------------------------------------------
 # CUSTOM CSS
@@ -22,155 +22,135 @@ BORDER = "#DCE5EF"
 st.markdown(
     f"""
     <style>
-    .stApp {{
-        background-color: {BACKGROUND};
-    }}
+        .stApp {{
+            background: {BACKGROUND};
+        }}
 
-    .block-container {{
-        padding-top: 1.5rem;
-        padding-bottom: 2rem;
-    }}
+        .block-container {{
+            padding-top: 1.5rem;
+            padding-bottom: 2rem;
+        }}
 
-    /* Main headings */
-    .page-title {{
-        color: {DARK_BLUE} !important;
-        font-size: 30px;
-        font-weight: 750;
-        margin-bottom: 4px;
-    }}
+        /* Page headings */
+        .page-title {{
+            color: {DARK_BLUE} !important;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            margin-bottom: 4px;
+        }}
 
-    .page-subtitle {{
-        color: {TEXT_GREY} !important;
-        font-size: 15px;
-        margin-bottom: 25px;
-    }}
+        .page-subtitle {{
+            color: {TEXT_GREY} !important;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }}
 
-    h1, h2, h3, h4 {{
-        color: {DARK_BLUE} !important;
-    }}
+        h1, h2, h3, h4 {{
+            color: {DARK_BLUE} !important;
+        }}
 
-    /* Section headings */
-    h4 {{
-        font-weight: 700 !important;
-        margin-top: 20px !important;
-        margin-bottom: 15px !important;
-    }}
+        /* Metric cards */
+        div[data-testid="stMetric"] {{
+            background: {WHITE};
+            border: 1px solid {BORDER};
+            border-left: 4px solid {JOBSTREET_BLUE};
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }}
 
-    /* Metric cards */
-    div[data-testid="stMetric"] {{
-        background-color: {WHITE};
-        border: 1px solid {BORDER};
-        border-left: 4px solid {JOBSTREET_BLUE};
-        border-radius: 10px;
-        padding: 17px 18px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    }}
+        div[data-testid="stMetricLabel"],
+        div[data-testid="stMetricLabel"] p {{
+            color: {TEXT_GREY} !important;
+            font-weight: 600 !important;
+        }}
 
-    div[data-testid="stMetricLabel"] {{
-        color: {TEXT_GREY} !important;
-        font-weight: 600 !important;
-    }}
+        div[data-testid="stMetricValue"] {{
+            color: {DARK_BLUE} !important;
+            font-weight: 800 !important;
+        }}
 
-    div[data-testid="stMetricLabel"] p {{
-        color: {TEXT_GREY} !important;
-    }}
+        /* Input labels */
+        label {{
+            color: {DARK_BLUE} !important;
+            font-weight: 600 !important;
+        }}
 
-    div[data-testid="stMetricValue"] {{
-        color: {DARK_BLUE} !important;
-        font-weight: 750 !important;
-    }}
+        /* Application cards */
+        div[data-testid="stVerticalBlockBorderWrapper"] {{
+            background: {WHITE};
+            border-color: {BORDER} !important;
+            border-radius: 10px;
+        }}
 
-    /* Input labels */
-    label, .stSelectbox label, .stTextInput label {{
-        color: {DARK_BLUE} !important;
-        font-weight: 600 !important;
-    }}
+        /* Status pills */
+        .pill {{
+            display: inline-block;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }}
 
-    /* Application cards */
-    div[data-testid="stVerticalBlockBorderWrapper"] {{
-        background-color: {WHITE};
-        border-color: {BORDER} !important;
-        border-radius: 10px;
-    }}
+        .status-submitted {{
+            background: #EAF3FF;
+            color: #0866B5;
+        }}
 
-    /* Application title and company */
-    .stMarkdown p {{
-        color: {TEXT_DARK};
-    }}
+        .status-viewed {{
+            background: #F0EEFE;
+            color: #6554C0;
+        }}
 
-    /* Status pills */
-    .pill {{
-        display: inline-block;
-        padding: 6px 13px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
-    }}
+        .status-shortlisted {{
+            background: #E7F7EF;
+            color: #16804A;
+        }}
 
-    .status-submitted {{
-        background-color: #E5F0FF;
-        color: #1455A0;
-    }}
+        .status-interview {{
+            background: #FFF4DF;
+            color: #9A6700;
+        }}
 
-    .status-viewed {{
-        background-color: #E8F4FC;
-        color: #08769B;
-    }}
+        .status-rejected {{
+            background: #FFF0EF;
+            color: #BF3B32;
+        }}
 
-    .status-shortlisted {{
-        background-color: #E3F5E9;
-        color: #187443;
-    }}
+        /* Buttons */
+        div.stButton > button {{
+            border-radius: 9px;
+            font-weight: 600;
+        }}
 
-    .status-interview {{
-        background-color: #FFF2D8;
-        color: #986000;
-    }}
+        div.stButton > button[kind="primary"] {{
+            background: {JOBSTREET_BLUE};
+            border: 1px solid {JOBSTREET_BLUE};
+            color: white;
+        }}
 
-    .status-rejected {{
-        background-color: #FCE8E8;
-        color: #B42318;
-    }}
+        div.stButton > button:hover {{
+            border-color: {DARK_BLUE};
+        }}
 
-    /* Buttons */
-    .stButton > button {{
-        background-color: {JOBSTREET_BLUE};
-        color: white !important;
-        border: none;
-        border-radius: 7px;
-        font-weight: 600;
-    }}
+        /* Text fields */
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="select"] > div {{
+            background: {WHITE};
+            border-radius: 8px;
+            border-color: {BORDER};
+        }}
 
-    .stButton > button:hover {{
-        background-color: {DARK_BLUE};
-        color: white !important;
-        border: none;
-    }}
+        /* Captions */
+        .stCaption {{
+            color: {TEXT_GREY} !important;
+        }}
 
-    /* Search and select boxes */
-    div[data-baseweb="input"] > div,
-    div[data-baseweb="select"] > div {{
-        background-color: {WHITE};
-        border-color: {BORDER};
-        border-radius: 7px;
-    }}
-
-    /* Captions */
-    .stCaption {{
-        color: {TEXT_GREY} !important;
-    }}
-
-    /* Info messages */
-    div[data-testid="stAlert"] {{
-        border-radius: 8px;
-    }}
-
-    /* Divider */
-    hr {{
-        border-color: {BORDER};
-    }}
-
+        /* Dividers */
+        hr {{
+            border-color: {BORDER};
+        }}
     </style>
     """,
     unsafe_allow_html=True
@@ -182,38 +162,33 @@ st.markdown(
 
 logo_path = Path(__file__).resolve().parents[1] / "assets" / "logo.png"
 
-header_logo, header_title = st.columns([1, 5])
+logo_col, title_col = st.columns([1, 5])
 
-with header_logo:
-    if logo_path.is_file():
-        st.image(str(logo_path), width=150)
+with logo_col:
+
+    if logo_path.exists():
+        st.image(str(logo_path), width=130)
     else:
         st.markdown(
             f"""
             <div style="
-                color: {JOBSTREET_BLUE};
-                font-size: 25px;
-                font-weight: 800;
-                padding-top: 5px;">
-                JobStreet
+                color:{JOBSTREET_BLUE};
+                font-size:25px;
+                font-weight:800;
+                padding-top:8px;">
+                job seeker
             </div>
             """,
             unsafe_allow_html=True
         )
 
-with header_title:
+with title_col:
+
     st.markdown(
-        f"""
-        <div style="padding-top: 5px;">
-            <div style="
-                color: {DARK_BLUE};
-                font-size: 28px;
-                font-weight: 750;">
-                My Applications
-            </div>
-            <div style="
-                color: {TEXT_GREY};
-                font-size: 14px;">
+        """
+        <div style="padding-top:5px;">
+            <div class="page-title">My Applications</div>
+            <div class="page-subtitle">
                 View and organise your submitted job applications in one place.
             </div>
         </div>
@@ -241,12 +216,11 @@ active = len(
     )]
 )
 
-shortlisted = len(df[df["Status"] == "Shortlisted"])
-interviews = len(df[df["Status"] == "Interview"])
-
 submitted = len(df[df["Status"] == "Submitted"])
 
-st.markdown("#### Application Overview")
+shortlisted = len(df[df["Status"] == "Shortlisted"])
+
+interviews = len(df[df["Status"] == "Interview"])
 
 c1, c2, c3, c4 = st.columns(4)
 
@@ -279,12 +253,14 @@ st.markdown("<br>", unsafe_allow_html=True)
 left, right = st.columns([2, 1])
 
 with left:
+
     search_text = st.text_input(
         "Search applications",
         placeholder="Search by job title or company"
     )
 
 with right:
+
     status_filter = st.selectbox(
         "Filter by status",
         [
@@ -300,6 +276,7 @@ with right:
 filtered = df.copy()
 
 if search_text:
+
     filtered = filtered[
         filtered["Job title"].str.contains(
             search_text,
@@ -315,6 +292,7 @@ if search_text:
     ]
 
 if status_filter != "All statuses":
+
     filtered = filtered[
         filtered["Status"] == status_filter
     ]
@@ -415,7 +393,7 @@ st.markdown("#### Application Activity Overview")
 # Count applications by status
 status_counts = df["Status"].value_counts()
 
-# Keep a consistent order for the chart
+# Maintain a consistent status order
 status_order = [
     "Submitted",
     "Viewed",
@@ -432,12 +410,71 @@ status_counts = status_counts.reindex(
 # Remove statuses with zero applications
 status_counts = status_counts[status_counts > 0]
 
-# Display bar chart
-st.bar_chart(
-    status_counts,
-    color=JOBSTREET_BLUE,
-    height=320
+# Convert data for Plotly
+chart_data = status_counts.rename_axis(
+    "Status"
+).reset_index(name="Applications")
+
+# Different colours for each bar
+status_colours = {
+    "Submitted": "#0872CE",
+    "Viewed": "#8064C2",
+    "Shortlisted": "#27AE60",
+    "Interview": "#F2B544",
+    "Rejected": "#E05252"
+}
+
+# Create bar chart
+fig = px.bar(
+    chart_data,
+    x="Status",
+    y="Applications",
+    color="Status",
+    color_discrete_map=status_colours,
+    text="Applications"
 )
+
+fig.update_traces(
+    textposition="outside",
+    marker_line_width=0
+)
+
+fig.update_layout(
+    height=320,
+    showlegend=False,
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(
+        color=DARK_BLUE,
+        family="Arial"
+    ),
+    xaxis_title="Application Status",
+    yaxis_title="Number of Applications",
+    yaxis=dict(
+        showgrid=True,
+        gridcolor="#E6EBF2",
+        rangemode="tozero",
+        dtick=1
+    ),
+    xaxis=dict(
+        showgrid=False
+    ),
+    margin=dict(
+        t=25,
+        b=20,
+        l=10,
+        r=10
+    )
+)
+
+st.plotly_chart(
+    fig,
+    use_container_width=True
+)
+
+# --------------------------------------------------
+# FOOTER
+# --------------------------------------------------
 
 st.caption(
     "Illustrative sample data. "

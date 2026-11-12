@@ -434,53 +434,12 @@ status_counts = status_counts.reindex(
 # Remove statuses with zero applications
 status_counts = status_counts[status_counts > 0]
 
-# Assign a different colour to each application status
-status_colours = {
-    "Submitted": "#0066CC",    # JobStreet blue
-    "Viewed": "#17A2B8",       # Teal
-    "Shortlisted": "#28A745",  # Green
-    "Interview": "#F2B544",    # Yellow
-    "Rejected": "#DC3545"      # Red
-}
-
-# Prepare chart data
-chart_data = status_counts.rename_axis("Status").reset_index(
-    name="Applications"
+# Display bar chart
+st.bar_chart(
+    status_counts,
+    color=JOBSTREET_BLUE,
+    height=320
 )
-
-# Create bar chart
-fig = px.bar(
-    chart_data,
-    x="Status",
-    y="Applications",
-    color="Status",
-    color_discrete_map=status_colours,
-    text="Applications"
-)
-
-fig.update_traces(
-    textposition="outside"
-)
-
-fig.update_layout(
-    height=320,
-    showlegend=False,
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    font=dict(color=DARK_BLUE),
-    xaxis_title="Application Status",
-    yaxis_title="Number of Applications",
-    yaxis=dict(
-        showgrid=True,
-        gridcolor="#E6EBF2",
-        rangemode="tozero",
-        dtick=1
-    ),
-    xaxis=dict(showgrid=False),
-    margin=dict(t=25, b=20, l=10, r=10)
-)
-
-st.plotly_chart(fig, use_container_width=True)
 
 st.caption(
     "Illustrative sample data. "

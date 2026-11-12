@@ -1,31 +1,19 @@
 
 import streamlit as st
-import pandas as pd
-import plotly.express as px
 from pathlib import Path
 
 # --------------------------------------------------
-# PAGE CONFIGURATION
-# --------------------------------------------------
-
-st.set_page_config(
-    page_title="Application Dashboard",
-    page_icon="📋",
-    layout="wide"
-)
-
-# --------------------------------------------------
-# JOBSTREET-INSPIRED COLOUR PALETTE
+# JOBSTREET COLOUR THEME
 # --------------------------------------------------
 
 JOBSTREET_BLUE = "#0066CC"
 DARK_BLUE = "#003B70"
 LIGHT_BLUE = "#EAF3FC"
-BACKGROUND = "#F5F7FA"
+BACKGROUND = "#F4F7FB"
 WHITE = "#FFFFFF"
-TEXT_DARK = "#263238"
-TEXT_GREY = "#64748B"
-BORDER = "#E2E8F0"
+TEXT_DARK = "#263746"
+TEXT_GREY = "#536579"
+BORDER = "#DCE5EF"
 
 # --------------------------------------------------
 # CUSTOM CSS
@@ -34,138 +22,155 @@ BORDER = "#E2E8F0"
 st.markdown(
     f"""
     <style>
-        .stApp {{
-            background-color: {BACKGROUND};
-        }}
+    .stApp {{
+        background-color: {BACKGROUND};
+    }}
 
-        .block-container {{
-            padding-top: 1.5rem;
-            padding-bottom: 2rem;
-        }}
+    .block-container {{
+        padding-top: 1.5rem;
+        padding-bottom: 2rem;
+    }}
 
-        h1, h2, h3 {{
-            color: {DARK_BLUE};
-        }}
+    /* Main headings */
+    .page-title {{
+        color: {DARK_BLUE} !important;
+        font-size: 30px;
+        font-weight: 750;
+        margin-bottom: 4px;
+    }}
 
-        .dashboard-header {{
-            background: {WHITE};
-            padding: 18px 24px;
-            border-radius: 12px;
-            border: 1px solid {BORDER};
-            margin-bottom: 22px;
-        }}
+    .page-subtitle {{
+        color: {TEXT_GREY} !important;
+        font-size: 15px;
+        margin-bottom: 25px;
+    }}
 
-        .dashboard-subtitle {{
-            color: {TEXT_GREY};
-            font-size: 14px;
-            margin-top: -8px;
-        }}
+    h1, h2, h3, h4 {{
+        color: {DARK_BLUE} !important;
+    }}
 
-        .metric-card {{
-            background: {WHITE};
-            padding: 18px;
-            border-radius: 12px;
-            border: 1px solid {BORDER};
-            min-height: 112px;
-        }}
+    /* Section headings */
+    h4 {{
+        font-weight: 700 !important;
+        margin-top: 20px !important;
+        margin-bottom: 15px !important;
+    }}
 
-        .metric-label {{
-            color: {TEXT_GREY};
-            font-size: 14px;
-            font-weight: 500;
-        }}
+    /* Metric cards */
+    div[data-testid="stMetric"] {{
+        background-color: {WHITE};
+        border: 1px solid {BORDER};
+        border-left: 4px solid {JOBSTREET_BLUE};
+        border-radius: 10px;
+        padding: 17px 18px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }}
 
-        .metric-value {{
-            color: {DARK_BLUE};
-            font-size: 30px;
-            font-weight: 700;
-            margin-top: 6px;
-        }}
+    div[data-testid="stMetricLabel"] {{
+        color: {TEXT_GREY} !important;
+        font-weight: 600 !important;
+    }}
 
-        .section-card {{
-            background: {WHITE};
-            padding: 18px;
-            border-radius: 12px;
-            border: 1px solid {BORDER};
-            margin-bottom: 16px;
-        }}
+    div[data-testid="stMetricLabel"] p {{
+        color: {TEXT_GREY} !important;
+    }}
 
-        .section-heading {{
-            color: {DARK_BLUE};
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }}
+    div[data-testid="stMetricValue"] {{
+        color: {DARK_BLUE} !important;
+        font-weight: 750 !important;
+    }}
 
-        .status {{
-            display: inline-block;
-            padding: 5px 11px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }}
+    /* Input labels */
+    label, .stSelectbox label, .stTextInput label {{
+        color: {DARK_BLUE} !important;
+        font-weight: 600 !important;
+    }}
 
-        .status-submitted {{
-            background: #E8F1FF;
-            color: #2457A6;
-        }}
+    /* Application cards */
+    div[data-testid="stVerticalBlockBorderWrapper"] {{
+        background-color: {WHITE};
+        border-color: {BORDER} !important;
+        border-radius: 10px;
+    }}
 
-        .status-interview {{
-            background: #FFF3D6;
-            color: #986500;
-        }}
+    /* Application title and company */
+    .stMarkdown p {{
+        color: {TEXT_DARK};
+    }}
 
-        .status-rejected {{
-            background: #FDECEC;
-            color: #B42318;
-        }}
+    /* Status pills */
+    .pill {{
+        display: inline-block;
+        padding: 6px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }}
 
-        .status-shortlisted {{
-            background: #E6F6ED;
-            color: #16804A;
-        }}
+    .status-submitted {{
+        background-color: #E5F0FF;
+        color: #1455A0;
+    }}
 
-        div[data-testid="stMetric"] {{
-            background: {WHITE};
-            border: 1px solid {BORDER};
-            padding: 16px;
-            border-radius: 12px;
-        }}
+    .status-viewed {{
+        background-color: #E8F4FC;
+        color: #08769B;
+    }}
 
-        div[data-testid="stMetricLabel"] {{
-            color: {TEXT_GREY};
-        }}
+    .status-shortlisted {{
+        background-color: #E3F5E9;
+        color: #187443;
+    }}
 
-        div[data-testid="stMetricValue"] {{
-            color: {DARK_BLUE};
-        }}
+    .status-interview {{
+        background-color: #FFF2D8;
+        color: #986000;
+    }}
 
-        div[data-testid="stDataFrame"] {{
-            border: 1px solid {BORDER};
-            border-radius: 10px;
-            overflow: hidden;
-        }}
+    .status-rejected {{
+        background-color: #FCE8E8;
+        color: #B42318;
+    }}
 
-        .stButton > button {{
-            background-color: {JOBSTREET_BLUE};
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-        }}
+    /* Buttons */
+    .stButton > button {{
+        background-color: {JOBSTREET_BLUE};
+        color: white !important;
+        border: none;
+        border-radius: 7px;
+        font-weight: 600;
+    }}
 
-        .stButton > button:hover {{
-            background-color: {DARK_BLUE};
-            color: white;
-        }}
+    .stButton > button:hover {{
+        background-color: {DARK_BLUE};
+        color: white !important;
+        border: none;
+    }}
 
-        div[data-baseweb="select"] > div {{
-            border-radius: 8px;
-        }}
+    /* Search and select boxes */
+    div[data-baseweb="input"] > div,
+    div[data-baseweb="select"] > div {{
+        background-color: {WHITE};
+        border-color: {BORDER};
+        border-radius: 7px;
+    }}
 
-        hr {{
-            border-color: {BORDER};
-        }}
+    /* Captions */
+    .stCaption {{
+        color: {TEXT_GREY} !important;
+    }}
+
+    /* Info messages */
+    div[data-testid="stAlert"] {{
+        border-radius: 8px;
+    }}
+
+    /* Divider */
+    hr {{
+        border-color: {BORDER};
+    }}
+
     </style>
     """,
     unsafe_allow_html=True
@@ -175,29 +180,42 @@ st.markdown(
 # HEADER WITH LOGO
 # --------------------------------------------------
 
-header_col1, header_col2 = st.columns([1, 5])
+logo_path = Path(__file__).resolve().parents[1] / "assets" / "logo.png"
 
-with header_col1:
-    logo_path = Path(__file__).resolve().parents[1] / "assets" / "logo.png"
+header_logo, header_title = st.columns([1, 5])
 
-    if logo_path.exists():
-        st.image(str(logo_path), width=125)
+with header_logo:
+    if logo_path.is_file():
+        st.image(str(logo_path), width=150)
     else:
         st.markdown(
-            f"<h2 style='color:{JOBSTREET_BLUE};'>JobStreet</h2>",
+            f"""
+            <div style="
+                color: {JOBSTREET_BLUE};
+                font-size: 25px;
+                font-weight: 800;
+                padding-top: 5px;">
+                JobStreet
+            </div>
+            """,
             unsafe_allow_html=True
         )
 
-with header_col2:
+with header_title:
     st.markdown(
         f"""
-        <div style="padding-top: 8px;">
-            <h1 style="margin-bottom: 0; color: {DARK_BLUE};">
-                Application Dashboard
-            </h1>
-            <p class="dashboard-subtitle">
-                Track and manage all your job applications in one place.
-            </p>
+        <div style="padding-top: 5px;">
+            <div style="
+                color: {DARK_BLUE};
+                font-size: 28px;
+                font-weight: 750;">
+                My Applications
+            </div>
+            <div style="
+                color: {TEXT_GREY};
+                font-size: 14px;">
+                View and organise your submitted job applications in one place.
+            </div>
         </div>
         """,
         unsafe_allow_html=True
@@ -206,54 +224,8 @@ with header_col2:
 st.markdown("---")
 
 # --------------------------------------------------
-# SAMPLE APPLICATION DATA
+# APPLICATION DATA
 # --------------------------------------------------
-
-if "applications" not in st.session_state:
-    st.session_state.applications = pd.DataFrame([
-        {
-            "Company": "Sarawak Energy Berhad",
-            "Position": "Data Analyst",
-            "Location": "Kuching, Sarawak",
-            "Date Applied": "2026-10-20",
-            "Status": "Interview"
-        },
-        {
-            "Company": "Bintulu Port Holdings",
-            "Position": "Business Systems Analyst",
-            "Location": "Bintulu, Sarawak",
-            "Date Applied": "2026-10-25",
-            "Status": "Shortlisted"
-        },
-        {
-            "Company": "PETRONAS",
-            "Position": "Software Engineer",
-            "Location": "Kuala Lumpur",
-            "Date Applied": "2026-10-28",
-            "Status": "Submitted"
-        },
-        {
-            "Company": "Maybank",
-            "Position": "Junior Data Scientist",
-            "Location": "Kuala Lumpur",
-            "Date Applied": "2026-11-01",
-            "Status": "Rejected"
-        },
-        {
-            "Company": "SEB",
-            "Position": "IT Support Executive",
-            "Location": "Kuching, Sarawak",
-            "Date Applied": "2026-11-05",
-            "Status": "Submitted"
-        },
-        {
-            "Company": "DHL",
-            "Position": "Project Coordinator",
-            "Location": "Kuching, Sarawak",
-            "Date Applied": "2026-11-08",
-            "Status": "Shortlisted"
-        }
-    ])
 
 df = st.session_state.applications.copy()
 
@@ -261,283 +233,213 @@ df = st.session_state.applications.copy()
 # SUMMARY METRICS
 # --------------------------------------------------
 
-total_applications = len(df)
-submitted_count = (df["Status"] == "Submitted").sum()
-shortlisted_count = (df["Status"] == "Shortlisted").sum()
-interview_count = (df["Status"] == "Interview").sum()
+total = len(df)
 
-st.markdown("### Overview")
+active = len(
+    df[df["Status"].isin(
+        ["Submitted", "Viewed", "Shortlisted", "Interview"]
+    )]
+)
 
-metric1, metric2, metric3, metric4 = st.columns(4)
+shortlisted = len(df[df["Status"] == "Shortlisted"])
+interviews = len(df[df["Status"] == "Interview"])
 
-with metric1:
-    st.metric("Total Applications", total_applications)
+submitted = len(df[df["Status"] == "Submitted"])
 
-with metric2:
-    st.metric("Submitted", submitted_count)
+st.markdown("#### Application Overview")
 
-with metric3:
-    st.metric("Shortlisted", shortlisted_count)
+c1, c2, c3, c4 = st.columns(4)
 
-with metric4:
-    st.metric("Interviews", interview_count)
+c1.metric(
+    "Total Applications",
+    total
+)
+
+c2.metric(
+    "Submitted",
+    submitted
+)
+
+c3.metric(
+    "Shortlisted",
+    shortlisted
+)
+
+c4.metric(
+    "Interviews",
+    interviews
+)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 # --------------------------------------------------
-# APPLICATION STATUS AND APPLICATION TREND CHARTS
+# SEARCH AND FILTER
 # --------------------------------------------------
 
-left_chart, right_chart = st.columns([1, 1.5])
+left, right = st.columns([2, 1])
 
-# STATUS DISTRIBUTION CHART - SHORTER
-with left_chart:
-    st.markdown("### Application Status")
-
-    status_data = (
-        df["Status"]
-        .value_counts()
-        .reset_index()
+with left:
+    search_text = st.text_input(
+        "Search applications",
+        placeholder="Search by job title or company"
     )
 
-    status_data.columns = ["Status", "Count"]
-
-    status_colours = {
-        "Submitted": "#4A90E2",
-        "Shortlisted": "#27AE60",
-        "Interview": "#F2B544",
-        "Rejected": "#E66A6A"
-    }
-
-    fig_status = px.pie(
-        status_data,
-        names="Status",
-        values="Count",
-        hole=0.65,
-        color="Status",
-        color_discrete_map=status_colours
-    )
-
-    fig_status.update_traces(
-        textposition="inside",
-        textinfo="percent",
-        hovertemplate="%{label}: %{value}<extra></extra>"
-    )
-
-    fig_status.update_layout(
-        height=280,
-        margin=dict(t=15, b=15, l=10, r=10),
-        showlegend=True,
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=-0.2,
-            xanchor="center",
-            x=0.5
-        ),
-        paper_bgcolor=WHITE,
-        plot_bgcolor=WHITE
-    )
-
-    st.plotly_chart(
-        fig_status,
-        use_container_width=True
-    )
-
-# APPLICATION TREND CHART - TALLER
-with right_chart:
-    st.markdown("### Application Activity")
-
-    df["Date Applied"] = pd.to_datetime(df["Date Applied"])
-
-    trend_data = (
-        df.groupby(df["Date Applied"].dt.strftime("%d %b"))
-        .size()
-        .reset_index(name="Applications")
-    )
-
-    trend_data.columns = ["Date", "Applications"]
-
-    fig_trend = px.bar(
-        trend_data,
-        x="Date",
-        y="Applications",
-        text="Applications",
-        color_discrete_sequence=[JOBSTREET_BLUE]
-    )
-
-    fig_trend.update_traces(
-        textposition="outside",
-        marker_line_width=0,
-        width=0.55
-    )
-
-    fig_trend.update_layout(
-        height=360,
-        margin=dict(t=20, b=15, l=10, r=10),
-        xaxis_title="Date Applied",
-        yaxis_title="Number of Applications",
-        paper_bgcolor=WHITE,
-        plot_bgcolor=WHITE,
-        font=dict(color=TEXT_DARK),
-        yaxis=dict(
-            showgrid=True,
-            gridcolor="#EDF1F5",
-            rangemode="tozero"
-        ),
-        xaxis=dict(showgrid=False)
-    )
-
-    st.plotly_chart(
-        fig_trend,
-        use_container_width=True
-    )
-
-st.markdown("---")
-
-# --------------------------------------------------
-# APPLICATION LIST AND FILTERS
-# --------------------------------------------------
-
-st.markdown("### My Applications")
-st.caption("Search, filter and review your submitted job applications.")
-
-filter_col1, filter_col2 = st.columns([2, 1])
-
-with filter_col1:
-    search_query = st.text_input(
-        "Search by company or position",
-        placeholder="e.g. Data Analyst, PETRONAS"
-    )
-
-with filter_col2:
-    status_options = ["All"] + sorted(df["Status"].unique().tolist())
-
-    selected_status = st.selectbox(
+with right:
+    status_filter = st.selectbox(
         "Filter by status",
-        status_options
+        [
+            "All statuses",
+            "Submitted",
+            "Viewed",
+            "Shortlisted",
+            "Interview",
+            "Rejected"
+        ]
     )
 
-filtered_df = df.copy()
+filtered = df.copy()
 
-if search_query:
-    filtered_df = filtered_df[
-        filtered_df["Company"].str.contains(
-            search_query,
+if search_text:
+    filtered = filtered[
+        filtered["Job title"].str.contains(
+            search_text,
             case=False,
             na=False
         )
         |
-        filtered_df["Position"].str.contains(
-            search_query,
+        filtered["Company"].str.contains(
+            search_text,
             case=False,
             na=False
         )
     ]
 
-if selected_status != "All":
-    filtered_df = filtered_df[
-        filtered_df["Status"] == selected_status
+if status_filter != "All statuses":
+    filtered = filtered[
+        filtered["Status"] == status_filter
     ]
 
-display_df = filtered_df.copy()
-display_df["Date Applied"] = display_df["Date Applied"].dt.strftime("%d %b %Y")
+# --------------------------------------------------
+# APPLICATION LIST
+# --------------------------------------------------
 
-st.dataframe(
-    display_df,
-    use_container_width=True,
-    hide_index=True,
-    column_config={
-        "Company": st.column_config.TextColumn("Company"),
-        "Position": st.column_config.TextColumn("Job Position"),
-        "Location": st.column_config.TextColumn("Location"),
-        "Date Applied": st.column_config.TextColumn("Date Applied"),
-        "Status": st.column_config.TextColumn("Application Status")
-    }
-)
+st.markdown("#### Application List")
 
-st.caption(f"Showing {len(filtered_df)} of {total_applications} applications.")
+if filtered.empty:
+
+    st.info(
+        "No applications match your search. "
+        "Try changing the search term or filter."
+    )
+
+else:
+
+    for index, row in filtered.iterrows():
+
+        with st.container(border=True):
+
+            a, b, c = st.columns([3, 1.2, 1.1])
+
+            with a:
+
+                st.markdown(
+                    f"**{row['Job title']}**"
+                )
+
+                st.caption(row["Company"])
+
+                st.caption(
+                    f"Applied: {row['Applied date']}"
+                )
+
+            with b:
+
+                css = {
+                    "Submitted": "status-submitted",
+                    "Viewed": "status-viewed",
+                    "Shortlisted": "status-shortlisted",
+                    "Interview": "status-interview",
+                    "Rejected": "status-rejected"
+                }.get(
+                    row["Status"],
+                    "status-submitted"
+                )
+
+                st.markdown(
+                    f'<span class="pill {css}">'
+                    f'{row["Status"]}'
+                    f'</span>',
+                    unsafe_allow_html=True
+                )
+
+            with c:
+
+                if st.button(
+                    "View details",
+                    key=f"details_{index}"
+                ):
+
+                    st.session_state.selected_application = row["Job title"]
 
 # --------------------------------------------------
 # APPLICATION DETAILS
 # --------------------------------------------------
 
-st.markdown("---")
-st.markdown("### Application Details")
+selected = st.session_state.get("selected_application")
 
-if not filtered_df.empty:
+if selected:
 
-    application_options = (
-        filtered_df["Company"] + " - " + filtered_df["Position"]
-    ).tolist()
+    result = df[df["Job title"] == selected]
 
-    selected_application = st.selectbox(
-        "Select an application to view details",
-        application_options
-    )
+    if not result.empty:
 
-    selected_index = application_options.index(selected_application)
-    selected_row = filtered_df.iloc[selected_index]
+        row = result.iloc[0]
 
-    detail_col1, detail_col2 = st.columns([1.2, 1])
+        st.markdown("#### Application Details")
 
-    with detail_col1:
-        st.markdown(
-            f"""
-            <div class="section-card">
-                <div class="section-heading">Job Information</div>
-                <p><b>Company:</b> {selected_row['Company']}</p>
-                <p><b>Position:</b> {selected_row['Position']}</p>
-                <p><b>Location:</b> {selected_row['Location']}</p>
-                <p><b>Date Applied:</b> {selected_row['Date Applied'].strftime('%d %B %Y')}</p>
-            </div>
-            """,
-            unsafe_allow_html=True
+        st.info(
+            f"**{row['Job title']}** at **{row['Company']}** "
+            f"— demo status: **{row['Status']}**. "
+            "In a live system, status information would depend "
+            "on updates supplied by the employer or platform."
         )
-
-    with detail_col2:
-        status = selected_row["Status"]
-
-        status_class = {
-            "Submitted": "status-submitted",
-            "Shortlisted": "status-shortlisted",
-            "Interview": "status-interview",
-            "Rejected": "status-rejected"
-        }.get(status, "status-submitted")
-
-        st.markdown(
-            f"""
-            <div class="section-card">
-                <div class="section-heading">Application Status</div>
-                <p>
-                    <span class="status {status_class}">
-                        {status}
-                    </span>
-                </p>
-                <p style="color:{TEXT_GREY}; font-size:14px;">
-                    Keep track of your application progress here.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-else:
-    st.info("No applications match your search or filter.")
 
 # --------------------------------------------------
-# FOOTER
+# APPLICATION ACTIVITY OVERVIEW
 # --------------------------------------------------
 
 st.markdown("---")
 
-st.markdown(
-    f"""
-    <div style="text-align:center; color:{TEXT_GREY}; font-size:12px;">
-        Job Seeker Dashboard Concept Prototype
-        <br>
-        Sample data for demonstration purposes only.
-    </div>
-    """,
-    unsafe_allow_html=True
+st.markdown("#### Application Activity Overview")
+
+# Count applications by status
+status_counts = df["Status"].value_counts()
+
+# Keep a consistent order for the chart
+status_order = [
+    "Submitted",
+    "Viewed",
+    "Shortlisted",
+    "Interview",
+    "Rejected"
+]
+
+status_counts = status_counts.reindex(
+    status_order,
+    fill_value=0
+)
+
+# Remove statuses with zero applications
+status_counts = status_counts[status_counts > 0]
+
+# Display bar chart
+st.bar_chart(
+    status_counts,
+    color=JOBSTREET_BLUE,
+    height=320
+)
+
+st.caption(
+    "Illustrative sample data. "
+    "This prototype is not connected to real employers."
 )

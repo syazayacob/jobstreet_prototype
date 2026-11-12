@@ -188,7 +188,7 @@ header_logo, header_title = st.columns([1, 5])
 
 with header_logo:
     if logo_path.is_file():
-        st.image(str(logo_path), width=150)
+        st.image(str(logo_path), width=400)
     else:
         st.markdown(
             f"""

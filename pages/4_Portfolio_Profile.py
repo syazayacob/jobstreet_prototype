@@ -279,35 +279,32 @@ left, right = st.columns([1, 2.2])
 with left:
 
     
+    
     # ----------------------------------------------
     # PROFILE INFORMATION
     # ----------------------------------------------
 
-    st.markdown(
-        f"""
-        <div class="profile-card">
-            <div class="profile-avatar">👩‍💻</div>
+    with st.container(border=True):
+        st.markdown(
+            "<div style='text-align:center; font-size:48px;'>👩‍💻</div>",
+            unsafe_allow_html=True
+        )
 
-            <div class="profile-name">Syaza Amani</div>
+        st.markdown(
+            "<h3 style='text-align:center; color:#003B70;'>Syaza Amani</h3>",
+            unsafe_allow_html=True
+        )
 
-            <div class="profile-role">Data Science Graduate</div>
+        st.markdown(
+            "<p style='text-align:center; color:#536579;'>Data Science Graduate</p>",
+            unsafe_allow_html=True
+        )
 
-            <hr>
+        st.divider()
 
-            <div class="profile-detail">
-                📍 Kuching, Sarawak
-            </div>
+        st.write("📍 Kuching, Sarawak")
+        st.write("✓ Open to opportunities")
 
-            <div class="profile-detail">
-                ✓ Open to opportunities
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-
-    st.write("")
 
     # ----------------------------------------------
     # PROFILE COMPLETION

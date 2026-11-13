@@ -13,7 +13,7 @@ const { chromium } = require('playwright');
         }
     });
 
-    await page.goto('https://miniature-space-sniffle-7qpww6p6gpq2wrxp-8501.app.github.dev/');
+    await page.goto('http://localhost:8501');
 
     // Wait for Streamlit to finish rendering
     await page.waitForTimeout(3000);

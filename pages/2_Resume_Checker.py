@@ -425,71 +425,57 @@ if show_review:
 
     feedback_col1, feedback_col2 = st.columns(2)
 
-
-    # Areas to Improve
     with feedback_col1:
+        with st.container(border=True):
+            st.markdown("#### Areas to Improve")
 
-        st.markdown("#### Areas to Improve")
+            st.markdown("**1. Highlight relevant skills**")
+            st.write(
+                "Include more role-specific technical skills "
+                "that match the job requirements."
+            )
 
-        st.markdown(
-            f"""
-            <div class="content-card">
+            st.divider()
 
-                <div class="feedback-item">
-                    <strong>1. Highlight relevant skills</strong><br>
-                    Include more role-specific technical skills
-                    that match the job requirements.
-                </div>
+            st.markdown("**2. Add measurable achievements**")
+            st.write(
+                "Include figures or outcomes to demonstrate "
+                "the impact of your projects."
+            )
 
-                <div class="feedback-item">
-                    <strong>2. Add measurable achievements</strong><br>
-                    Include figures or outcomes to demonstrate
-                    the impact of your projects.
-                </div>
+            st.divider()
 
-                <div class="feedback-item">
-                    <strong>3. Improve work experience descriptions</strong><br>
-                    Use clear action verbs to describe your
-                    responsibilities and contributions.
-                </div>
+            st.markdown("**3. Improve work experience descriptions**")
+            st.write(
+                "Use clear action verbs to describe your "
+                "responsibilities and contributions."
+            )
 
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # Recommended Actions
     with feedback_col2:
+        with st.container(border=True):
+            st.markdown("#### Recommended Actions")
 
-        st.markdown("#### Recommended Actions")
+            st.markdown("**1. Tailor your resume**")
+            st.write(
+                "Adjust your resume content to better match "
+                "the selected job role."
+            )
 
-        st.markdown(
-            f"""
-            <div class="content-card">
+            st.divider()
 
-                <div class="feedback-item">
-                    <strong>1. Tailor your resume</strong><br>
-                    Adjust your resume content to better match
-                    the selected job role.
-                </div>
+            st.markdown("**2. Strengthen project descriptions**")
+            st.write(
+                "Explain the tools, technologies and results "
+                "from your academic or professional projects."
+            )
 
-                <div class="feedback-item">
-                    <strong>2. Strengthen project descriptions</strong><br>
-                    Explain the tools, technologies and results
-                    from your academic or professional projects.
-                </div>
+            st.divider()
 
-                <div class="feedback-item">
-                    <strong>3. Review formatting</strong><br>
-                    Maintain consistent headings, spacing
-                    and bullet points throughout the document.
-                </div>
-
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+            st.markdown("**3. Review formatting**")
+            st.write(
+                "Maintain consistent headings, spacing "
+                "and bullet points throughout the document."
+            )
 
 
     # ----------------------------------------------

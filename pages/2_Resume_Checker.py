@@ -3,9 +3,9 @@ import streamlit as st
 from pathlib import Path
 
 
-# --------------------------------------------------
+# ==================================================
 # PAGE CONFIGURATION
-# --------------------------------------------------
+# ==================================================
 
 st.set_page_config(
     page_title="Resume Compatibility Checker",
@@ -14,9 +14,9 @@ st.set_page_config(
 )
 
 
-# --------------------------------------------------
-# JOBSTREET COLOURS
-# --------------------------------------------------
+# ==================================================
+# JOBSTREET COLOUR THEME
+# ==================================================
 
 JOBSTREET_BLUE = "#0066CC"
 DARK_BLUE = "#003B70"
@@ -28,9 +28,9 @@ TEXT_GREY = "#536579"
 BORDER = "#DCE5EF"
 
 
-# --------------------------------------------------
+# ==================================================
 # CUSTOM CSS
-# --------------------------------------------------
+# ==================================================
 
 st.markdown(
     f"""
@@ -54,7 +54,7 @@ st.markdown(
         font-size: 15px;
     }}
 
-    /* Markdown list text */
+    /* Markdown lists */
     div[data-testid="stMarkdownContainer"] ul li,
     div[data-testid="stMarkdownContainer"] ul li p {{
         color: {TEXT_DARK} !important;
@@ -69,7 +69,7 @@ st.markdown(
     }}
 
     /* Section headings */
-    h2, h3 {{
+    h2, h3, h4 {{
         color: {DARK_BLUE} !important;
         font-weight: 700 !important;
     }}
@@ -79,7 +79,7 @@ st.markdown(
         color: {TEXT_GREY} !important;
     }}
 
-    /* Horizontal divider */
+    /* Divider */
     hr {{
         border: none;
         border-top: 1px solid {BORDER};
@@ -112,9 +112,8 @@ st.markdown(
         font-weight: 600;
     }}
 
-    /* Select box and text input */
-    div[data-baseweb="select"] > div,
-    div[data-baseweb="input"] > div {{
+    /* Select box */
+    div[data-baseweb="select"] > div {{
         border-radius: 8px;
         border-color: {BORDER};
     }}
@@ -131,9 +130,19 @@ st.markdown(
         background-color: {WHITE};
     }}
 
-    /* Information and alert messages */
+    /* Alerts */
     div[data-testid="stAlert"] {{
         border-radius: 8px;
+    }}
+
+    /* General content card */
+    .content-card {{
+        background-color: {WHITE};
+        border: 1px solid {BORDER};
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 59, 112, 0.04);
     }}
 
     /* Score card */
@@ -172,24 +181,39 @@ st.markdown(
         margin-top: 10px;
     }}
 
-    /* General content cards */
-    .content-card {{
-        background-color: {WHITE};
-        border: 1px solid {BORDER};
-        border-radius: 12px;
-        padding: 22px;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 8px rgba(0, 59, 112, 0.04);
-    }}
-
     /* Feedback items */
     .feedback-item {{
         background-color: {LIGHT_BLUE};
         border-radius: 8px;
-        padding: 12px 15px;
-        margin-bottom: 10px;
+        padding: 13px 15px;
+        margin-bottom: 12px;
         color: {TEXT_DARK};
         font-size: 14px;
+        line-height: 1.6;
+    }}
+
+    .feedback-item strong {{
+        color: {DARK_BLUE};
+    }}
+
+    /* Checklist card */
+    .checklist-card {{
+        background-color: {WHITE};
+        border: 1px solid {BORDER};
+        border-radius: 12px;
+        padding: 22px;
+        min-height: 190px;
+    }}
+
+    .checklist-card ul {{
+        padding-left: 22px;
+        margin-bottom: 0;
+    }}
+
+    .checklist-card li {{
+        color: {TEXT_DARK};
+        font-size: 15px;
+        margin-bottom: 12px;
     }}
 
     /* Status labels */
@@ -211,15 +235,6 @@ st.markdown(
         font-weight: 600;
     }}
 
-    /* Checklist card */
-    .checklist-card {{
-        background-color: {WHITE};
-        border: 1px solid {BORDER};
-        border-radius: 12px;
-        padding: 22px;
-        min-height: 190px;
-    }}
-
     /* Progress bar */
     div[data-testid="stProgressBar"] > div > div {{
         background-color: {JOBSTREET_BLUE};
@@ -231,9 +246,9 @@ st.markdown(
 )
 
 
-# --------------------------------------------------
-# HEADER WITH LOGO
-# --------------------------------------------------
+# ==================================================
+# HEADER
+# ==================================================
 
 logo_path = Path(__file__).resolve().parents[1] / "assets" / "logo.png"
 
@@ -246,10 +261,12 @@ with header_col1:
 with header_col2:
     st.markdown(
         f"""
-        <h1 style="margin-bottom: 0;">Resume Compatibility Checker</h1>
+        <h1 style="margin-bottom: 0;">
+            Resume Compatibility Checker
+        </h1>
         <p style="color: {TEXT_GREY}; margin-top: 5px;">
-            Review your resume and identify areas that may need attention
-            before applying for a job.
+            Review your resume and identify areas that may need
+            attention before applying for a job.
         </p>
         """,
         unsafe_allow_html=True
@@ -258,26 +275,27 @@ with header_col2:
 st.divider()
 
 
-# --------------------------------------------------
+# ==================================================
 # INTRODUCTION
-# --------------------------------------------------
+# ==================================================
 
 st.info(
     "This is an illustrative resume review prototype. "
     "The uploaded file is not processed by a real ATS system, "
-    "and the sample results below are not generated from the uploaded document."
+    "and the sample results are not generated from the uploaded document."
 )
 
 
-# --------------------------------------------------
+# ==================================================
 # RESUME UPLOAD AND ROLE SELECTION
-# --------------------------------------------------
+# ==================================================
 
 st.markdown("### Upload Your Resume")
 
 left_col, right_col = st.columns([1.2, 1])
 
 with left_col:
+
     st.markdown("#### Resume Details")
 
     uploaded_file = st.file_uploader(
@@ -301,35 +319,38 @@ with left_col:
         ]
     )
 
-    st.markdown("")
+    st.write("")
+
     show_review = st.button(
         "Show Sample Resume Review",
         use_container_width=True
     )
 
+
 with right_col:
+
     st.markdown("#### Features Checked")
 
     st.markdown(
-        """
+        f"""
         <div class="checklist-card">
-        <ul>
-            <li>Contact information is present</li>
-            <li>Education and qualifications are listed</li>
-            <li>Skills are relevant to the target role</li>
-            <li>Project or work experience is described</li>
-            <li>Resume structure is clear and readable</li>
-            <li>Important sections are not missing</li>
-        </ul>
+            <ul>
+                <li>Contact information is present</li>
+                <li>Education and qualifications are listed</li>
+                <li>Skills are relevant to the target role</li>
+                <li>Project or work experience is described</li>
+                <li>Resume structure is clear and readable</li>
+                <li>Important sections are not missing</li>
+            </ul>
         </div>
         """,
         unsafe_allow_html=True
     )
 
 
-# --------------------------------------------------
+# ==================================================
 # SAMPLE REVIEW RESULTS
-# --------------------------------------------------
+# ==================================================
 
 if show_review:
 
@@ -347,22 +368,26 @@ if show_review:
         unsafe_allow_html=True
     )
 
+
     # ----------------------------------------------
-    # SCORE AND OVERVIEW
+    # COMPATIBILITY SCORE AND OVERVIEW
     # ----------------------------------------------
 
     score_col, overview_col = st.columns([1, 1.7])
 
     with score_col:
+
         st.markdown(
             f"""
             <div class="score-card">
                 <div class="score-label">
                     Illustrative Compatibility Score
                 </div>
+
                 <div class="score-number">
                     82 / 100
                 </div>
+
                 <div class="score-description">
                     Good compatibility with the selected job role
                 </div>
@@ -371,28 +396,36 @@ if show_review:
             unsafe_allow_html=True
         )
 
+
     with overview_col:
+
         st.markdown(
             f"""
             <div class="content-card">
-                <h3 style="margin-top: 0;">Overall Assessment</h3>
+                <h3 style="margin-top: 0;">
+                    Overall Assessment
+                </h3>
+
                 <p style="color: {TEXT_DARK};">
                     Your sample resume demonstrates a good foundation
                     for the selected role. It includes relevant
                     qualifications, technical skills and project
                     experience.
                 </p>
+
                 <p style="color: {TEXT_DARK};">
                     A few improvements could make your resume clearer
                     and help highlight your suitability for the position.
                 </p>
-                <p style="margin-bottom: 0;">
-                    <span class="status-good">Good Compatibility</span>
-                </p>
+
+                <span class="status-good">
+                    Good Compatibility
+                </span>
             </div>
             """,
             unsafe_allow_html=True
         )
+
 
     # ----------------------------------------------
     # FEEDBACK AND SUGGESTIONS
@@ -402,11 +435,15 @@ if show_review:
 
     feedback_col1, feedback_col2 = st.columns(2)
 
+
+    # Areas to Improve
     with feedback_col1:
+
+        st.markdown("#### Areas to Improve")
+
         st.markdown(
             f"""
             <div class="content-card">
-                <h3 style="margin-top: 0;">Areas to Improve</h3>
 
                 <div class="feedback-item">
                     <strong>1. Highlight relevant skills</strong><br>
@@ -425,16 +462,21 @@ if show_review:
                     Use clear action verbs to describe your
                     responsibilities and contributions.
                 </div>
+
             </div>
             """,
             unsafe_allow_html=True
         )
 
+
+    # Recommended Actions
     with feedback_col2:
+
+        st.markdown("#### Recommended Actions")
+
         st.markdown(
             f"""
             <div class="content-card">
-                <h3 style="margin-top: 0;">Recommended Actions</h3>
 
                 <div class="feedback-item">
                     <strong>1. Tailor your resume</strong><br>
@@ -453,10 +495,12 @@ if show_review:
                     Maintain consistent headings, spacing
                     and bullet points throughout the document.
                 </div>
+
             </div>
             """,
             unsafe_allow_html=True
         )
+
 
     # ----------------------------------------------
     # RESUME SECTION CHECKLIST
@@ -465,8 +509,8 @@ if show_review:
     st.markdown("### Resume Section Checklist")
 
     st.markdown(
-        "The following checklist illustrates the sections reviewed "
-        "in this sample assessment."
+        "The following checklist illustrates the sections "
+        "reviewed in this sample assessment."
     )
 
     checklist_items = [
@@ -480,29 +524,35 @@ if show_review:
 
     for item_name, status, progress, is_good in checklist_items:
 
-        with st.container():
-            item_col1, item_col2 = st.columns([2, 1])
+        item_col1, item_col2 = st.columns([2, 1])
 
-            with item_col1:
-                st.markdown(f"**{item_name}**")
+        with item_col1:
+            st.markdown(f"**{item_name}**")
 
-            with item_col2:
-                if is_good:
-                    st.markdown(
-                        '<span class="status-good">✓ '
-                        + status
-                        + '</span>',
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.markdown(
-                        '<span class="status-warning">! '
-                        + status
-                        + '</span>',
-                        unsafe_allow_html=True
-                    )
+        with item_col2:
 
-            st.progress(progress / 100)
+            if is_good:
+                st.markdown(
+                    f"""
+                    <span class="status-good">
+                        ✓ {status}
+                    </span>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            else:
+                st.markdown(
+                    f"""
+                    <span class="status-warning">
+                        ! {status}
+                    </span>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+        st.progress(progress / 100)
+
 
     # ----------------------------------------------
     # FINAL MESSAGE

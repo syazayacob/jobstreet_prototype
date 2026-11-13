@@ -2,8 +2,20 @@
 import streamlit as st
 from pathlib import Path
 
+
 # --------------------------------------------------
-# JOBSTREET COLOUR THEME
+# PAGE CONFIGURATION
+# --------------------------------------------------
+
+st.set_page_config(
+    page_title="Resume Compatibility Checker",
+    page_icon="📄",
+    layout="wide"
+)
+
+
+# --------------------------------------------------
+# JOBSTREET COLOURS
 # --------------------------------------------------
 
 JOBSTREET_BLUE = "#0066CC"
@@ -14,8 +26,7 @@ WHITE = "#FFFFFF"
 TEXT_DARK = "#263746"
 TEXT_GREY = "#536579"
 BORDER = "#DCE5EF"
-GREEN = "#28A745"
-ORANGE = "#F2B544"
+
 
 # --------------------------------------------------
 # CUSTOM CSS
@@ -24,147 +35,43 @@ ORANGE = "#F2B544"
 st.markdown(
     f"""
     <style>
+
+    /* Main background */
     .stApp {{
         background-color: {BACKGROUND};
     }}
 
+    /* Main content spacing */
     .block-container {{
-        padding-top: 1.5rem;
-        padding-bottom: 2rem;
-    }}
-
-    /* Main headings */
-    .page-title {{
-        color: {DARK_BLUE} !important;
-        font-size: 30px;
-        font-weight: 750;
-        margin-bottom: 4px;
-    }}
-
-    .page-subtitle {{
-        color: {TEXT_GREY} !important;
-        font-size: 15px;
-        margin-bottom: 25px;
-    }}
-
-    h1, h2, h3, h4 {{
-        color: {DARK_BLUE} !important;
-    }}
-
-    h4 {{
-        font-weight: 700 !important;
-        margin-top: 20px !important;
-        margin-bottom: 15px !important;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+        max-width: 1200px;
     }}
 
     /* General text */
     .stMarkdown p {{
         color: {TEXT_DARK};
+        font-size: 15px;
     }}
 
-    /* Information panels */
-    div[data-testid="stVerticalBlockBorderWrapper"] {{
-        background-color: {WHITE};
-        border-color: {BORDER} !important;
-        border-radius: 10px;
+    /* Markdown list text */
+    div[data-testid="stMarkdownContainer"] ul li,
+    div[data-testid="stMarkdownContainer"] ul li p {{
+        color: {TEXT_DARK} !important;
+        font-size: 15px !important;
     }}
 
-    /* Buttons */
-    .stButton > button {{
-        background-color: {JOBSTREET_BLUE};
-        color: white !important;
-        border: none;
-        border-radius: 7px;
-        font-weight: 600;
-        min-height: 42px;
-    }}
-
-    .stButton > button:hover {{
-        background-color: {DARK_BLUE};
-        color: white !important;
-        border: none;
-    }}
-
-    /* Input labels */
-    label, .stSelectbox label, .stFileUploader label {{
+    /* Page title */
+    h1 {{
         color: {DARK_BLUE} !important;
-        font-weight: 600 !important;
+        font-size: 30px !important;
+        font-weight: 700 !important;
     }}
 
-    /* Input fields */
-    div[data-baseweb="input"] > div,
-    div[data-baseweb="select"] > div {{
-        background-color: {WHITE};
-        border-color: {BORDER};
-        border-radius: 7px;
-    }}
-
-    /* File uploader */
-    div[data-testid="stFileUploader"] {{
-        background-color: {WHITE};
-        border: 1px dashed {BORDER};
-        border-radius: 9px;
-        padding: 12px;
-    }}
-
-    /* Score panel */
-    .score-panel {{
-        background-color: {WHITE};
-        border: 1px solid {BORDER};
-        border-radius: 12px;
-        padding: 22px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        min-height: 175px;
-    }}
-
-    .metric-label {{
-        color: {TEXT_GREY};
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }}
-
-    .score {{
-        color: {JOBSTREET_BLUE};
-        font-size: 38px;
-        font-weight: 800;
-        margin-bottom: 10px;
-    }}
-
-    /* Status pills */
-    .pill {{
-        display: inline-block;
-        padding: 6px 13px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
-    }}
-
-    .pill-good {{
-        background-color: #E3F5E9;
-        color: #187443;
-    }}
-
-    .pill-review {{
-        background-color: #FFF2D8;
-        color: #986000;
-    }}
-
-    .pill-missing {{
-        background-color: #FCE8E8;
-        color: #B42318;
-    }}
-
-    /* Progress bars */
-    div[data-testid="stProgressBar"] > div {{
-        background-color: #DCE5EF;
-        border-radius: 10px;
-    }}
-
-    div[data-testid="stProgressBar"] > div > div {{
-        background-color: {JOBSTREET_BLUE};
-        border-radius: 10px;
+    /* Section headings */
+    h2, h3 {{
+        color: {DARK_BLUE} !important;
+        font-weight: 700 !important;
     }}
 
     /* Captions */
@@ -172,14 +79,150 @@ st.markdown(
         color: {TEXT_GREY} !important;
     }}
 
-    /* Alerts */
+    /* Horizontal divider */
+    hr {{
+        border: none;
+        border-top: 1px solid {BORDER};
+        margin-top: 1.2rem;
+        margin-bottom: 1.2rem;
+    }}
+
+    /* Buttons */
+    .stButton > button {{
+        background-color: {JOBSTREET_BLUE};
+        color: {WHITE};
+        border: none;
+        border-radius: 8px;
+        padding: 0.55rem 1.2rem;
+        font-weight: 600;
+        transition: 0.2s;
+    }}
+
+    .stButton > button:hover {{
+        background-color: {DARK_BLUE};
+        color: {WHITE};
+        border: none;
+    }}
+
+    /* Input labels */
+    .stTextInput label,
+    .stSelectbox label,
+    .stFileUploader label {{
+        color: {TEXT_DARK} !important;
+        font-weight: 600;
+    }}
+
+    /* Select box and text input */
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="input"] > div {{
+        border-radius: 8px;
+        border-color: {BORDER};
+    }}
+
+    /* File uploader */
+    div[data-testid="stFileUploader"] {{
+        background-color: {WHITE};
+        border: 1px dashed {JOBSTREET_BLUE};
+        border-radius: 10px;
+        padding: 15px;
+    }}
+
+    div[data-testid="stFileUploader"] section {{
+        background-color: {WHITE};
+    }}
+
+    /* Information and alert messages */
     div[data-testid="stAlert"] {{
         border-radius: 8px;
     }}
 
-    /* Divider */
-    hr {{
-        border-color: {BORDER};
+    /* Score card */
+    .score-card {{
+        background-color: {WHITE};
+        border: 1px solid {BORDER};
+        border-left: 5px solid {JOBSTREET_BLUE};
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        min-height: 190px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 59, 112, 0.05);
+    }}
+
+    .score-label {{
+        color: {TEXT_GREY};
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }}
+
+    .score-number {{
+        color: {JOBSTREET_BLUE};
+        font-size: 48px;
+        font-weight: 800;
+        line-height: 1.2;
+        margin: 0;
+    }}
+
+    .score-description {{
+        color: {TEXT_GREY};
+        font-size: 13px;
+        margin-top: 10px;
+    }}
+
+    /* General content cards */
+    .content-card {{
+        background-color: {WHITE};
+        border: 1px solid {BORDER};
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 59, 112, 0.04);
+    }}
+
+    /* Feedback items */
+    .feedback-item {{
+        background-color: {LIGHT_BLUE};
+        border-radius: 8px;
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        color: {TEXT_DARK};
+        font-size: 14px;
+    }}
+
+    /* Status labels */
+    .status-good {{
+        color: #218838;
+        background-color: #E8F5E9;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }}
+
+    .status-warning {{
+        color: #B7791F;
+        background-color: #FFF4D6;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }}
+
+    /* Checklist card */
+    .checklist-card {{
+        background-color: {WHITE};
+        border: 1px solid {BORDER};
+        border-radius: 12px;
+        padding: 22px;
+        min-height: 190px;
+    }}
+
+    /* Progress bar */
+    div[data-testid="stProgressBar"] > div > div {{
+        background-color: {JOBSTREET_BLUE};
     }}
 
     </style>
@@ -187,259 +230,291 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 # --------------------------------------------------
 # HEADER WITH LOGO
 # --------------------------------------------------
 
 logo_path = Path(__file__).resolve().parents[1] / "assets" / "logo.png"
 
-header_logo, header_title = st.columns([1, 5])
+header_col1, header_col2 = st.columns([1, 5])
 
-with header_logo:
-    if logo_path.is_file():
+with header_col1:
+    if logo_path.exists():
         st.image(str(logo_path), width=150)
-    else:
-        st.markdown(
-            f"""
-            <div style="
-                color: {JOBSTREET_BLUE};
-                font-size: 25px;
-                font-weight: 800;
-                padding-top: 5px;">
-                JobStreet
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
-with header_title:
+with header_col2:
     st.markdown(
         f"""
-        <div style="padding-top: 5px;">
-            <div style="
-                color: {DARK_BLUE};
-                font-size: 28px;
-                font-weight: 750;">
-                Resume Compatibility Checker
-            </div>
-            <div style="
-                color: {TEXT_GREY};
-                font-size: 14px;">
-                Review your resume and identify areas that may need attention before applying.
-            </div>
+        <h1 style="margin-bottom: 0;">Resume Compatibility Checker</h1>
+        <p style="color: {TEXT_GREY}; margin-top: 5px;">
+            Review your resume and identify areas that may need attention
+            before applying for a job.
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.divider()
+
+
+# --------------------------------------------------
+# INTRODUCTION
+# --------------------------------------------------
+
+st.info(
+    "This is an illustrative resume review prototype. "
+    "The uploaded file is not processed by a real ATS system, "
+    "and the sample results below are not generated from the uploaded document."
+)
+
+
+# --------------------------------------------------
+# RESUME UPLOAD AND ROLE SELECTION
+# --------------------------------------------------
+
+st.markdown("### Upload Your Resume")
+
+left_col, right_col = st.columns([1.2, 1])
+
+with left_col:
+    st.markdown("#### Resume Details")
+
+    uploaded_file = st.file_uploader(
+        "Upload your resume",
+        type=["pdf", "doc", "docx"],
+        help="Supported formats: PDF, DOC and DOCX."
+    )
+
+    if uploaded_file is not None:
+        st.success(f"File selected: {uploaded_file.name}")
+    else:
+        st.caption("No resume uploaded yet.")
+
+    target_role = st.selectbox(
+        "Select your target job role",
+        [
+            "Business Systems Analyst",
+            "Data Analyst",
+            "Software Engineer",
+            "Project Coordinator"
+        ]
+    )
+
+    st.markdown("")
+    show_review = st.button(
+        "Show Sample Resume Review",
+        use_container_width=True
+    )
+
+with right_col:
+    st.markdown("#### Features Checked")
+
+    st.markdown(
+        """
+        <div class="checklist-card">
+        <ul>
+            <li>Contact information is present</li>
+            <li>Education and qualifications are listed</li>
+            <li>Skills are relevant to the target role</li>
+            <li>Project or work experience is described</li>
+            <li>Resume structure is clear and readable</li>
+            <li>Important sections are not missing</li>
+        </ul>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-st.markdown("---")
-
-# --------------------------------------------------
-# PROTOTYPE INFORMATION
-# --------------------------------------------------
-
-st.info(
-    "Prototype note: this page demonstrates a proposed "
-    "resume-review experience. It does not run a real ATS "
-    "scan or analyse the contents of uploaded files."
-)
-
-# --------------------------------------------------
-# RESUME UPLOAD AND FEATURE DESCRIPTION
-# --------------------------------------------------
-
-left, right = st.columns([1.15, 0.85])
-
-with left:
-
-    with st.container(border=True):
-
-        st.markdown("#### Upload Your Resume")
-
-        uploaded = st.file_uploader(
-            "Choose a resume file",
-            type=["pdf", "doc", "docx"]
-        )
-
-        target_role = st.selectbox(
-            "Target Job Role",
-            [
-                "Business Systems Analyst",
-                "Data Analyst",
-                "Software Engineer",
-                "Project Coordinator"
-            ]
-        )
-
-        if uploaded:
-
-            st.success(f"File selected: {uploaded.name}")
-
-            st.caption(
-                f"File size: {uploaded.size / 1024:.1f} KB"
-            )
-
-        else:
-
-            st.caption(
-                "No file uploaded. Explore the illustrative sample results."
-            )
-
-        analyse = st.button(
-            "Show Sample Resume Review",
-            type="primary",
-            use_container_width=True
-        )
-
-with right:
-
-    with st.container(border=True):
-
-        st.markdown("#### What This Feature Checks")
-
-        st.markdown(
-            """
-            - Contact information is present
-            - Education and qualifications are listed
-            - Skills are relevant to the target role
-            - Project or work experience is described
-            - Resume structure is clear and readable
-            - Important sections are not missing
-            """
-        )
-
-        st.markdown("---")
-
-        st.markdown("**Supported file formats**")
-
-        st.caption("PDF, DOC and DOCX")
 
 # --------------------------------------------------
 # SAMPLE REVIEW RESULTS
 # --------------------------------------------------
 
-if analyse or "resume_demo_result" not in st.session_state:
-    st.session_state.resume_demo_result = True
+if show_review:
 
-if st.session_state.resume_demo_result:
+    st.divider()
 
-    st.markdown("---")
+    st.markdown("## Resume Review Results")
 
-    st.markdown("#### Sample Review Results")
-
-    score_col, feedback_col = st.columns([1, 2])
+    st.markdown(
+        f"""
+        <p style="color: {TEXT_GREY};">
+            Sample review for the selected role:
+            <strong>{target_role}</strong>
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
 
     # ----------------------------------------------
-    # COMPATIBILITY SCORE
+    # SCORE AND OVERVIEW
     # ----------------------------------------------
+
+    score_col, overview_col = st.columns([1, 1.7])
 
     with score_col:
-
         st.markdown(
-            '<div class="score-panel">',
+            f"""
+            <div class="score-card">
+                <div class="score-label">
+                    Illustrative Compatibility Score
+                </div>
+                <div class="score-number">
+                    82 / 100
+                </div>
+                <div class="score-description">
+                    Good compatibility with the selected job role
+                </div>
+            </div>
+            """,
             unsafe_allow_html=True
         )
 
+    with overview_col:
         st.markdown(
-            '<div class="metric-label">'
-            'Illustrative Compatibility Score'
-            '</div>',
+            f"""
+            <div class="content-card">
+                <h3 style="margin-top: 0;">Overall Assessment</h3>
+                <p style="color: {TEXT_DARK};">
+                    Your sample resume demonstrates a good foundation
+                    for the selected role. It includes relevant
+                    qualifications, technical skills and project
+                    experience.
+                </p>
+                <p style="color: {TEXT_DARK};">
+                    A few improvements could make your resume clearer
+                    and help highlight your suitability for the position.
+                </p>
+                <p style="margin-bottom: 0;">
+                    <span class="status-good">Good Compatibility</span>
+                </p>
+            </div>
+            """,
             unsafe_allow_html=True
         )
-
-        st.markdown(
-            '<div class="score">82 / 100</div>',
-            unsafe_allow_html=True
-        )
-
-        st.markdown(
-            '<span class="pill pill-good">'
-            'Good Starting Point'
-            '</span>',
-            unsafe_allow_html=True
-        )
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        st.progress(0.82)
 
     # ----------------------------------------------
-    # FEEDBACK
+    # FEEDBACK AND SUGGESTIONS
     # ----------------------------------------------
 
-    with feedback_col:
+    st.markdown("### Suggestions for Improvement")
 
-        with st.container(border=True):
+    feedback_col1, feedback_col2 = st.columns(2)
 
-            st.markdown(
-                f"**Target Role:** {target_role}"
-            )
+    with feedback_col1:
+        st.markdown(
+            f"""
+            <div class="content-card">
+                <h3 style="margin-top: 0;">Areas to Improve</h3>
 
-            st.markdown("**Suggested Areas to Review:**")
+                <div class="feedback-item">
+                    <strong>1. Highlight relevant skills</strong><br>
+                    Include more role-specific technical skills
+                    that match the job requirements.
+                </div>
 
-            st.write(
-                "• Add measurable outcomes to project descriptions."
-            )
+                <div class="feedback-item">
+                    <strong>2. Add measurable achievements</strong><br>
+                    Include figures or outcomes to demonstrate
+                    the impact of your projects.
+                </div>
 
-            st.write(
-                "• Include relevant tools and technical skills."
-            )
+                <div class="feedback-item">
+                    <strong>3. Improve work experience descriptions</strong><br>
+                    Use clear action verbs to describe your
+                    responsibilities and contributions.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-            st.write(
-                "• Ensure education details and dates are complete."
-            )
+    with feedback_col2:
+        st.markdown(
+            f"""
+            <div class="content-card">
+                <h3 style="margin-top: 0;">Recommended Actions</h3>
 
-            st.write(
-                "• Use consistent headings and formatting."
-            )
+                <div class="feedback-item">
+                    <strong>1. Tailor your resume</strong><br>
+                    Adjust your resume content to better match
+                    the selected job role.
+                </div>
 
-    # --------------------------------------------------
-    # SECTION CHECKLIST
-    # --------------------------------------------------
+                <div class="feedback-item">
+                    <strong>2. Strengthen project descriptions</strong><br>
+                    Explain the tools, technologies and results
+                    from your academic or professional projects.
+                </div>
 
-    st.markdown("#### Section Checklist")
+                <div class="feedback-item">
+                    <strong>3. Review formatting</strong><br>
+                    Maintain consistent headings, spacing
+                    and bullet points throughout the document.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-    checklist = [
-        ("Contact Information", "Complete", 1.0, "pill-good"),
-        ("Education", "Complete", 1.0, "pill-good"),
-        ("Technical Skills", "Review Suggested", 0.75, "pill-review"),
-        ("Projects / Experience", "Add More Detail", 0.60, "pill-review"),
-        ("Formatting Consistency", "Review Suggested", 0.80, "pill-review"),
+    # ----------------------------------------------
+    # RESUME SECTION CHECKLIST
+    # ----------------------------------------------
+
+    st.markdown("### Resume Section Checklist")
+
+    st.markdown(
+        "The following checklist illustrates the sections reviewed "
+        "in this sample assessment."
+    )
+
+    checklist_items = [
+        ("Contact Information", "Complete", 100, True),
+        ("Education and Qualifications", "Complete", 100, True),
+        ("Technical Skills", "Needs Improvement", 75, False),
+        ("Project / Work Experience", "Complete", 100, True),
+        ("Resume Structure", "Good", 90, True),
+        ("Relevant Keywords", "Needs Improvement", 65, False)
     ]
 
-    for label, result, value, css in checklist:
+    for item_name, status, progress, is_good in checklist_items:
 
-        with st.container(border=True):
+        with st.container():
+            item_col1, item_col2 = st.columns([2, 1])
 
-            x, y, z = st.columns([2, 1.5, 2])
+            with item_col1:
+                st.markdown(f"**{item_name}**")
 
-            with x:
+            with item_col2:
+                if is_good:
+                    st.markdown(
+                        '<span class="status-good">✓ '
+                        + status
+                        + '</span>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown(
+                        '<span class="status-warning">! '
+                        + status
+                        + '</span>',
+                        unsafe_allow_html=True
+                    )
 
-                st.markdown(
-                    f"**{label}**"
-                )
+            st.progress(progress / 100)
 
-            with y:
-
-                st.markdown(
-                    f'<span class="pill {css}">{result}</span>',
-                    unsafe_allow_html=True
-                )
-
-            with z:
-
-                st.progress(value)
-
-    # --------------------------------------------------
-    # NEXT STEP
-    # --------------------------------------------------
+    # ----------------------------------------------
+    # FINAL MESSAGE
+    # ----------------------------------------------
 
     st.success(
-        "Suggested next step: review the feedback and "
-        "update your resume before applying."
+        "Sample review completed! Consider applying the suggestions "
+        "above to improve your resume before submitting a job application."
     )
 
     st.caption(
-        "The score and checklist are fixed demonstration content, "
-        "not results from the uploaded file."
+        "Note: The compatibility score and feedback are illustrative "
+        "sample results for demonstration purposes only. "
+        "They do not represent an actual resume analysis or ATS evaluation."
     )

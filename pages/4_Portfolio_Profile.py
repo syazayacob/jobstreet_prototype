@@ -246,7 +246,7 @@ header_col1, header_col2 = st.columns([1, 5])
 
 with header_col1:
     if logo_path.exists():
-        st.image(str(logo_path), width=150)
+        st.image(str(logo_path), width=800)
 
 with header_col2:
     st.markdown(
@@ -278,6 +278,7 @@ left, right = st.columns([1, 2.2])
 
 with left:
 
+    
     # ----------------------------------------------
     # PROFILE INFORMATION
     # ----------------------------------------------
@@ -285,18 +286,11 @@ with left:
     st.markdown(
         f"""
         <div class="profile-card">
+            <div class="profile-avatar">👩‍💻</div>
 
-            <div class="profile-avatar">
-                👩‍💻
-            </div>
+            <div class="profile-name">Syaza Amani</div>
 
-            <div class="profile-name">
-                Syaza Amani
-            </div>
-
-            <div class="profile-role">
-                Data Science Graduate
-            </div>
+            <div class="profile-role">Data Science Graduate</div>
 
             <hr>
 
@@ -307,11 +301,11 @@ with left:
             <div class="profile-detail">
                 ✓ Open to opportunities
             </div>
-
         </div>
         """,
         unsafe_allow_html=True
     )
+
 
     st.write("")
 

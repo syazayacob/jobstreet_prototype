@@ -62,13 +62,6 @@ st.markdown(
         color: {TEXT_DARK};
     }}
 
-    /* Feature checklist text */
-    div[data-testid="stMarkdownContainer"] ul li,
-    div[data-testid="stMarkdownContainer"] ul li p {
-        color: #263746 !important;
-        font-size: 15px !important;
-    }
-
     /* Information panels */
     div[data-testid="stVerticalBlockBorderWrapper"] {{
         background-color: {WHITE};

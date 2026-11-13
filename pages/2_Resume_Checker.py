@@ -370,24 +370,21 @@ if show_review:
 
 
     # ----------------------------------------------
-    # COMPATIBILITY SCORE AND OVERVIEW
+    # SCORE AND OVERVIEW
     # ----------------------------------------------
 
     score_col, overview_col = st.columns([1, 1.7])
 
     with score_col:
-
         st.markdown(
             f"""
             <div class="score-card">
                 <div class="score-label">
                     Illustrative Compatibility Score
                 </div>
-
                 <div class="score-number">
                     82 / 100
                 </div>
-
                 <div class="score-description">
                     Good compatibility with the selected job role
                 </div>
@@ -396,31 +393,24 @@ if show_review:
             unsafe_allow_html=True
         )
 
-
     with overview_col:
-
         st.markdown(
             f"""
             <div class="content-card">
-                <h3 style="margin-top: 0;">
-                    Overall Assessment
-                </h3>
-
+                <h3 style="margin-top: 0;">Overall Assessment</h3>
                 <p style="color: {TEXT_DARK};">
                     Your sample resume demonstrates a good foundation
                     for the selected role. It includes relevant
                     qualifications, technical skills and project
                     experience.
                 </p>
-
                 <p style="color: {TEXT_DARK};">
                     A few improvements could make your resume clearer
                     and help highlight your suitability for the position.
                 </p>
-
-                <span class="status-good">
-                    Good Compatibility
-                </span>
+                <p style="margin-bottom: 0;">
+                    <span class="status-good">Good Compatibility</span>
+                </p>
             </div>
             """,
             unsafe_allow_html=True
